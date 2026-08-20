@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Signin = () => {
+export const SignIn = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
@@ -40,7 +40,6 @@ export const Signin = () => {
             });
 
             const data = await response.json();
-
             if (!response.ok) {
                 throw new Error(data.message || "Invalid email or password");
             }
@@ -49,12 +48,20 @@ export const Signin = () => {
             //localStorage.setItem("token", data.token);
 
             // Optional: store user information
-            if (data.user) {
-                localStorage.setItem("user", JSON.stringify(data.user.profile));
+            if (data) {
+                localStorage.setItem("user", JSON.stringify(data));
             }
 
             // Login successful
-            navigate("/dashboard");
+            if (data.role === "admin") {
+                navigate("/dashboard-admin");
+            } else if (data.role === "ngo") {
+                navigate("/dashboard-ngo");
+            } else if (data.role === "donor") {
+                navigate("/dashboard-donor");
+            } else {
+                navigate("/*")
+            }
         } catch (err) {
             setError(err.message);
         } finally {
@@ -141,3 +148,4 @@ export const Signin = () => {
         </div>
     );
 };
+

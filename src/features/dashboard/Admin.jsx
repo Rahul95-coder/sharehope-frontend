@@ -1,8 +1,13 @@
-import React from 'react'
+import { Logout } from "../../shared/components/Logout"
 
 const Admin = () => {
+    
   return (
-    <div>Admin</div>
+    <div>
+        Admin
+
+        <Logout/>
+    </div>
   )
 }
 
