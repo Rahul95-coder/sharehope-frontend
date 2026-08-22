@@ -1,26 +1,21 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSignIn } from "./hooks";
+import { Loader } from "lucide-react";
 
 export const SignIn = () => {
     const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
 
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+    const signInMutation = useSignIn();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         setError("");
 
         if (!formData.email || !formData.password) {
@@ -28,124 +23,96 @@ export const SignIn = () => {
             return;
         }
 
-        try {
-            setLoading(true);
-
-            const response = await fetch("http://localhost:8080/api/auth/signin", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || "Invalid email or password");
-            }
-
-            // Store JWT token
-            //localStorage.setItem("token", data.token);
-
-            // Optional: store user information
-            if (data) {
-                localStorage.setItem("user", JSON.stringify(data));
-            }
-
-            // Login successful
-            if (data.role === "admin") {
-                navigate("/dashboard-admin");
-            } else if (data.role === "ngo") {
-                navigate("/dashboard-ngo");
-            } else if (data.role === "donor") {
-                navigate("/dashboard-donor");
-            } else {
-                navigate("/*")
-            }
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
+        signInMutation.mutate(formData);
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <div className="card w-full overflow-hidden border-primary/10 bg-white p-5 sm:p-7 lg:p-8">
+            {/* Brand accent */}
+            <div className="mb-6 flex justify-center sm:mb-8">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-light text-primary shadow-soft">
+                    <span className="text-xl font-bold">S</span>
+                </div>
+            </div>
 
-                <h1 className="text-3xl font-bold text-center mb-2">
-                    Sign In
+            {/* Header */}
+            <div className="mb-7 text-center sm:mb-8">
+                <h1 className="font-lora text-2xl font-bold tracking-tight text-primary sm:text-3xl">
+                    Welcome Back
                 </h1>
 
-                <p className="text-gray-500 text-center mb-6">
-                    Login to your account
+                <p className="text-body mt-2">
+                    Sign in to continue to ShareHope
                 </p>
+            </div>
 
+            <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Email */}
+                <div>
+                    <label className="label">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={(e) =>
+                            setFormData((prev) => ({
+                                ...prev,
+                                email: e.target.value,
+                            }))
+                        }
+                        placeholder="Enter your email"
+                        autoComplete="email"
+                        className="input"
+                    />
+                </div>
+
+                {/* Password */}
+                <div>
+                    <label className="label">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={(e) =>
+                            setFormData((prev) => ({
+                                ...prev,
+                                password: e.target.value,
+                            }))
+                        }
+                        placeholder="Enter your password"
+                        autoComplete="current-password"
+                        className="input"
+                    />
+                </div>
+
+                {/* Error */}
                 {error && (
-                    <div className="mb-4 rounded-md bg-red-100 text-red-700 px-4 py-3">
+                    <p className="animate-fade-in rounded-md border border-danger/20 bg-danger-light px-3 py-2 text-sm text-danger">
                         {error}
-                    </div>
+                    </p>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Submit */}
+                <button
+                    type="submit"
+                    disabled={signInMutation.isPending}
+                    className="btn-primary focus-ring w-full"
+                >
+                    {signInMutation.isPending ? (
+                        <Loader className="h-5 w-5 animate-spin" />
+                    ) : (
+                        "Sign In"
+                    )}
+                </button>
+            </form>
 
-                    {/* Email */}
-                    <div>
-                        <label className="block mb-2 font-medium">
-                            Email
-                        </label>
-
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Enter your email"
-                            autoComplete="email"
-                            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    {/* Password */}
-                    <div>
-                        <label className="block mb-2 font-medium">
-                            Password
-                        </label>
-
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Enter your password"
-                            autoComplete="current-password"
-                            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    {/* Submit */}
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400"
-                    >
-                        {loading ? "Signing In..." : "Sign In"}
-                    </button>
-
-                </form>
-
-                <p className="text-center text-gray-500 mt-6">
-                    Don't have an account?{" "}
-                    <button
-                        onClick={() => navigate("/signup")}
-                        className="text-blue-600 font-semibold hover:underline"
-                    >
-                        Sign Up
-                    </button>
-                </p>
-
-            </div>
+           
         </div>
     );
 };
-

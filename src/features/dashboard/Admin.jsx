@@ -5,7 +5,7 @@ const Admin = () => {
   return (
     <div>
         Admin
-
+      
         <Logout/>
     </div>
   )
