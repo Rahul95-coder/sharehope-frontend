@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../features/auth/util";
+import { useLogout } from "../../features/auth/hooks";
 
 export const Logout = () => {
     const navigate = useNavigate();
-  return (
+    const logout = useLogout();
+    return (
     <div>
         <button onClick={() => {
-            logout();
-            navigate("/signin");
+            logout.mutate();
+            navigate("/auth");
         }} >Logout</button>
     </div>
   )

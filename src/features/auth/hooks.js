@@ -49,10 +49,12 @@ export const useSignup = () => {
 };
 
 export const useLogout = () => {
+    const clearUser = useAuthStore((state) => state.clearUser);
     return useMutation({
         mutationFn:logOutApi,
          onSuccess:(res) => {
             console.log(res);
+            clearUser();
             toast.success("Logout successfull.")
         },
         onError:(error) => {
