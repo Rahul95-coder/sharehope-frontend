@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSignIn } from "./hooks";
 import { Loader } from "lucide-react";
 
-export const SignIn = () => {
+export const SignIn = ({setTab}) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -112,7 +112,11 @@ export const SignIn = () => {
                 </button>
             </form>
 
-           
+
+                <p>Don't have account?</p>
+                    <button type="button" onClick={() => 
+                      setTab("signup")
+                    }>Sign up</button>
         </div>
     );
 };

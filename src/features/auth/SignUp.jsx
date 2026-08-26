@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { useSignup } from "./hooks";
 
-const SignUp = () => {
+const SignUp = ({setTab}) => {
     const signUpMutation = useSignup();
 
     const [formData, setFormData] = useState({
@@ -445,6 +445,12 @@ const SignUp = () => {
                     </p>
                 </div>
             </form>
+
+            
+                <p>Already have an account ?</p>
+                    <button type="button" onClick={() => 
+                      setTab("signin")
+                    }>Sign In</button>
         </div>
     );
 };
