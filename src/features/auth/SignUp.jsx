@@ -446,11 +446,6 @@ const SignUp = ({setTab}) => {
                 </div>
             </form>
 
-            
-                <p>Already have an account ?</p>
-                    <button type="button" onClick={() => 
-                      setTab("signin")
-                    }>Sign In</button>
         </div>
     );
 };

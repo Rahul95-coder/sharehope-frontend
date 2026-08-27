@@ -112,11 +112,6 @@ export const SignIn = ({setTab}) => {
                 </button>
             </form>
 
-
-                <p>Don't have account?</p>
-                    <button type="button" onClick={() => 
-                      setTab("signup")
-                    }>Sign up</button>
         </div>
     );
 };
