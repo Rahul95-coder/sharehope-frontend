@@ -11,7 +11,7 @@ const Auth = () => {
         {tab === "signin" && (
           <div className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-6">
             <div className="w-full max-w-md">
-              <SignIn setTab={setTab} />
+              <SignIn  />
               <p
                 onClick={() => setTab("signup")}
                 className="mt-5 cursor-pointer text-center text-sm text-primary-dark"
@@ -26,7 +26,7 @@ const Auth = () => {
         {tab === "signup" && (
           <div className="container-app py-8 sm:py-12 lg:py-16">
             <div className="mx-auto w-full max-w-5xl">
-              <SignUp setTab={setTab} />
+              <SignUp  />
               <p
                 onClick={() => setTab("signin")}
                 className="mt-5 cursor-pointer text-center text-sm text-primary-dark"

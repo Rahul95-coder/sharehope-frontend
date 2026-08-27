@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { useSignup } from "./hooks";
 
-const SignUp = ({setTab}) => {
+const SignUp = () => {
     const signUpMutation = useSignup();
 
     const [formData, setFormData] = useState({

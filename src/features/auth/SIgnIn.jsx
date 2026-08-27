@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSignIn } from "./hooks";
 import { Loader } from "lucide-react";
 
-export const SignIn = ({setTab}) => {
-    const navigate = useNavigate();
+export const SignIn = () => {
+   
 
     const [formData, setFormData] = useState({
         email: "",
