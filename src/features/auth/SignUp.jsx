@@ -2,23 +2,31 @@ import { useState } from "react";
 
 import { useSignup } from "./hooks";
 
-const SignUp = () => {
-    const signUpMutation = useSignup();
+const emptyFormData = {
+    name: "",
+    role: "",
+    email: "",
+    phone: "",
+    password: "",
+    contactPersonName: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    donorType: "",
+    registrationNumber: "",
+};
 
-    const [formData, setFormData] = useState({
-        name: "",
-        role: "",
-        email: "",
-        phone: "",
-        password: "",
-        contactPersonName: "",
-        address: "",
-        city: "",
-        state: "",
-        pincode: "",
-        donorType: "",
-        registrationNumber: "",
+const SignUp = ({ onSignedUp }) => {
+    const signUpMutation = useSignup({
+        onSuccess: () => {
+            setFormData(emptyFormData);
+            setFile(null);
+            onSignedUp?.();
+        },
     });
+
+    const [formData, setFormData] = useState(emptyFormData);
 
     const [file, setFile] = useState(null);
 
